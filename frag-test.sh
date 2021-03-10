@@ -48,7 +48,6 @@ setup_variables ()
     export DEFRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --testnet"
 
     # Bootstrap Addresses
-    # This will work after https://github.com/input-output-hk/ops-scripts/issues/4 is resolved, until then use hard-coded values 
     export BOOTSTRAP_ADDRESS=$(./frag-ops.py print-bootstrap-address --mnemonics ./mnemonic.txt --testnet --raw)
 }
 
