@@ -29,7 +29,7 @@ setup_variables ()
 {
     # Faucet API KEY
     # https://developers.cardano.org/en/testnets/cardano/about/the-testnet-faucet/
-    export APIKEY=HawnRyeOM94wntkYbLJNAhC8CuDf6kve
+    export APIKEY=<APIKEY>
 
     # Test Constants
     export UTXO_OUTPUTS=50
