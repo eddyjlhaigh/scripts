@@ -29,7 +29,7 @@ setup_variables ()
 {
     # Faucet API KEY
     # https://developers.cardano.org/en/testnets/cardano/about/the-testnet-faucet/
-    export APIKEY=<APIKEY_HERE>
+    export APIKEY=HawnRyeOM94wntkYbLJNAhC8CuDf6kve
 
     # Test Constants
     export UTXO_OUTPUTS=50
@@ -42,12 +42,15 @@ setup_variables ()
     export WALLET_PATH_TO_WALLET_DB=../../cardano-wallet/testnet-db/rnd.0d5744ed252d063967e972fb5c5294fe35e9607f.sqlite
 
     # Frag Variables
-    export FRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --outputs $UTXO_OUTPUTS --total $LOVELACE --testnet --bootstrap"
+    export DRY_RUN_FRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --outputs $UTXO_OUTPUTS --total $LOVELACE --testnet --bootstrap"
+    export LIVE_RUN_FRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --outputs $UTXO_OUTPUTS --total $LOVELACE --testnet --bootstrap --live --no-confirm"
 
     # Defrag Variables
-    export DEFRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --testnet"
+    export DRY_RUN_DEFRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --testnet"
+    export LIVE_RUN_DEFRAG_WALLET="--mnemonics $WALLET_PATH_TO_MNEMONICS_FILE --wid $WALLET_WALLETID --wpass $WALLET_PATH_TO_PASS_FILE --wdb $WALLET_PATH_TO_WALLET_DB --testnet --live --no-confirm"
 
     # Bootstrap Addresses
+    # This will work after https://github.com/input-output-hk/ops-scripts/issues/4 is resolved, until then use hard-coded values 
     export BOOTSTRAP_ADDRESS=$(./frag-ops.py print-bootstrap-address --mnemonics ./mnemonic.txt --testnet --raw)
 }
 
@@ -58,22 +61,32 @@ request_funds_from_faucet ()
     sleep 3m # Wait for faucet funds
 }
 
-frag_wallets ()
+frag_wallets_dry_run ()
 {
-    ./frag-ops.py frag $FRAG_WALLET
+    ./frag-ops.py frag $DRY_RUN_FRAG_WALLET
 }
 
-defrag_wallets ()
+frag_wallets_live_run ()
 {
-    ./frag-ops.py defrag $DEFRAG_WALLET
+    ./frag-ops.py frag $LIVE_RUN_FRAG_WALLET
+}
+
+defrag_wallets_dry_run ()
+{
+    ./frag-ops.py defrag $DRY_RUN_DEFRAG_WALLET
+}
+
+defrag_wallets_live_run ()
+{
+    ./frag-ops.py defrag $LIVE_RUN_DEFRAG_WALLET
 }
 
 main()
 {
     setup_variables
     request_funds_from_faucet
-    frag_wallets
-    defrag_wallets
+    frag_wallets_live_run
+    defrag_wallets_live_run
 }
 
 main
